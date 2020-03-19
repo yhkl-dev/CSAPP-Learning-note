@@ -1,0 +1,27 @@
+mov ax, 62627  | AX = F4A3H BX = 0000H
+mov ah, 31H    | AX = 31A3H BX = 0000H
+mov al, 23H    | AX = 3123H BX = 0000H
+add ax, ax     | AX = 6246H BX = 0000H
+
+mov bx, 826CH  | AX = 6246H BX = 8286H
+mov cx, ax     | AX = 6246H BX = 8286H CX = 6246H
+mov ax, bx     | AX = 8286H BX = 8286H CX = 6246H
+
+mov al, bh     | AX = 8282H BX = 8286H CX = 6246H
+
+mov ah, bl     | AX = 8682H BX = 8286H CX = 6246H
+add ah, ah     | AX = 0C82H BX = 8286H CX = 6264H
+add al, 6      | AX = 0C88H BX = 8286H CX = 6264H
+add al, al     | AX = 0C10H BX = 8286H CX = 6264H
+mov ax, cx     | AX = 6264H BX = 6264H CX = 6264H
+
+
+2^4
+
+mov ax, 2    | AX = 0002H
+add ax, ax   | AX = 0004H
+add ax, ax   | AX = 0008H
+add ax, ax   | AX = 0010H
+
+
+
