@@ -1,2 +1,2 @@
-# CSAPP-Learning-note
-深入理解计算机系统课程笔记
+# Learning-note
+Just Learn note for unix, network, system, etc..
