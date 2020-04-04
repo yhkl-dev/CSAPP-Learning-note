@@ -5,6 +5,3 @@
   (cond ((= n 0) a)
 	((even? n) (iter a (* b b) (/ n 2)))
 	(else (iter (* a b) b (- n 1)))))
-
-
-
