@@ -1,3 +1,4 @@
+; http://www.yangkai.org.cn/2020/04/11/%E8%AF%81%E6%98%8EFib-n-%E6%98%AF%E6%9C%80%E6%8E%A5%E8%BF%91%CE%A6-n-%E2%88%9A5-%E5%85%B6%E4%B8%AD%CE%A6-%EF%BC%881-%E2%88%9A5-2/
 (define (new-fib n)
 	(cond ((= n 0) 0)
 				((= n 1) 1)
