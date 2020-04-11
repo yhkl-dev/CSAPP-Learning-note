@@ -15,9 +15,11 @@ typedef struct Stack {
 
 stack* initStack(); 
 Status push(stack *s, ElementType data);
-Status pop(stack *s);
+Status pop(stack *s, ElementType *e);
 void printStackData(stack *s);
 bool isEmpty(stack *s);
+Status clearStack(stack *s); 
+Status DestroyStack(stack *s); 
 
 int main() {
 	stack *s = initStack();
@@ -25,8 +27,10 @@ int main() {
 	push(s, 101);
 	push(s, 1021);
 	printStackData(s);
-
-	pop(s);
+	
+	ElementType e;
+	pop(s, &e);
+	printf("poped data: %d\n", e);
 	printStackData(s);
 	return 0;
 }
@@ -47,8 +51,10 @@ Status push(stack *s, ElementType data) {
 	return ERROR;
 }
 
-Status pop(stack *s) {
+Status pop(stack *s, ElementType *e) {
 	if (s->top != -1) {
+		printf("top: %d\n", s->top);
+		*e = s->data[s->top];
 		s->top--;
 		return OK;
 	}
@@ -69,4 +75,14 @@ bool isEmpty(stack *s) {
 		return true;
 	}
 	return false;
+}
+
+Status clearStack(stack *s) {
+	s->top = -1;
+	return OK;
+}
+
+Status DestroyStack(stack *s) {
+	free(s);
+	return OK;
 }
