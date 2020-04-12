@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "link_stack.h"
+#include <string.h>
+
 
 bool match(char *data);
 
@@ -10,16 +12,6 @@ int main() {
 
 	char match_data[] = "()()()";
 	
-	linkStack *l = initLinkStack();
-	printStack(l);
-
-	char a = '1';
-	push(l, a);
-	printStack(l);
-	
-	ElementType data;
-	pop(l, &data);
-	printf("poped data: %d\n", data);
 	printf("--------------\n");
 	match(match_data);	
 
@@ -27,6 +19,13 @@ int main() {
 }
 
 bool match(char *data) {
-	printf("%s\n", data);
+	
+	int len = strlen(data);
+	int i;
+	for (i = 0; i < len; i++) {
+		printf("%c\n", data[i]);
+	}
+
+	printf("\n");
 	return false;
 }
