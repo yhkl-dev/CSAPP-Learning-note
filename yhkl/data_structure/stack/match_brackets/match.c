@@ -25,7 +25,6 @@ int main() {
 
 int match(char *match_data) {
 	
-//	char match_data[8] = "(()()())";
 	int i;
 	linkStack *s = initLinkStack();
 
@@ -41,8 +40,6 @@ int match(char *match_data) {
 			pop(s, y);
 		}
 	}
-
-	printf("\n");
 	if (isEmpty(s)) {
 		return 0;
 	}
