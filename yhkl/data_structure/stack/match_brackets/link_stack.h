@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-
 #define ElementType char
 
 typedef struct StackNode {
@@ -16,7 +12,7 @@ typedef struct LinkStack {
 
 linkStack* initLinkStack();
 void printStack(linkStack *l);
-bool push(linkStack *l, ElementType data);
+bool push(linkStack *l, ElementType *data);
 bool pop(linkStack *l, ElementType *e); 
 bool isEmpty(linkStack *l);
 

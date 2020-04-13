@@ -4,28 +4,47 @@
 #include <string.h>
 
 
-bool match(char *data);
+int match(char *match_data);
 
 
 int main() {
-	printf("hello world\n");
-
-	char match_data[] = "()()()";
+	char match_data[] = "()()()[]]";
 	
-	printf("--------------\n");
-	match(match_data);	
+	int value = match(match_data);
+	printf("%d\n", value);
+	if (value == 1) {
+		printf("true\n");
+	} else {
+		printf("false\n");
+	}
+	
 
 	return 0;
 }
 
-bool match(char *data) {
+
+int match(char *match_data) {
 	
-	int len = strlen(data);
+//	char match_data[8] = "(()()())";
 	int i;
-	for (i = 0; i < len; i++) {
-		printf("%c\n", data[i]);
+	linkStack *s = initLinkStack();
+
+	for (i = 0; i < strlen(match_data); i++) {
+		char x[2];
+		x[0] = match_data[i];
+		x[1] = '\0';
+		if (strcmp(x, "(") == 0 || strcmp(x, "[") == 0 || strcmp(x, "{") == 0) {
+			push(s, x);
+		}
+		if (strcmp(x, ")") == 0 || strcmp(x, "]") == 0 || strcmp(x, "}") == 0) {
+			ElementType y[2];
+			pop(s, y);
+		}
 	}
 
 	printf("\n");
-	return false;
+	if (isEmpty(s)) {
+		return 0;
+	}
+	return 1;
 }

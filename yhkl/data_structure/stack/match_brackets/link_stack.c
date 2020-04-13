@@ -1,4 +1,7 @@
+#include <stdbool.h>
+#include <stdio.h>
 #include "link_stack.h"
+#include <stdlib.h>
 
 linkStack* initLinkStack() {
 	linkStack *l = (linkStack *)malloc(sizeof(linkStack));
@@ -19,10 +22,11 @@ void printStack(linkStack *l) {
 	printf("\n");
 }
 
-bool push(linkStack *l, ElementType data) {
+bool push(linkStack *l, ElementType *data) {
 	linkStackPtr node = (linkStackPtr)malloc(sizeof(stackNode));
 
-	node->data = data;
+	//strcpy(node->data, data);
+	node->data = data[2];
 	node->next = l->top;
 	l->top = node;
 	l->count++;
@@ -34,6 +38,7 @@ bool pop(linkStack *l, ElementType *e) {
 	if (isEmpty(l)) {
 		return false;
 	}
+//	strcpy(*e, l->top->data);
 	*e = l->top->data;
 	cursor = l->top;
 	l->top = l->top->next;
