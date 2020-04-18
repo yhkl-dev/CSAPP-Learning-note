@@ -52,9 +52,17 @@ bool push(queue *q, ElementType value) {
 }
 
 bool pop(queue *q, ElementType *e) {
+	if (q->head == q->tail) {
+		return false;
+	}
+
+
+
 	node *element = q->head->next;
 	*e = element->data;
 	q->head->next = element->next;
+	if (q->tail == element)
+		q->tail = q->head;
 	free(element);
 	return true;
 }
