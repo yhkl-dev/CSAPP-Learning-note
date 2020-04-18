@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define ElementType int
+
+typedef struct QueueNode {
+	ElementType data;
+	struct QueueNode *next;
+} node;
+
+typedef struct {
+	node element;
+	node *head;
+} queue;
+
+queue* initQueue();
+bool push(queue *q, ElementType value);
+bool pop(queue *q, ElementType *e);
+
+int main() {
+	queue *q = initQueue();
+
+	return 0;
+}
+
+queue* initQueue() {
+	queue *q = (queue *)malloc(sizeof(queue));
+	return q;
+}
+
+
+bool push(queue *q, ElementType value) {
+	node *element = (node *)malloc(sizeof(node));
+	element->data = value;
+	q->next = element;
+}
+bool pop(queue *q, ElementType *e);
