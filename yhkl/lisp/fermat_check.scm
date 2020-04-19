@@ -11,3 +11,8 @@
 	(define (try-i a)
 		(= (expmod a n n) a))
 	(try-it (+ 1 (random (- n 1)))))
+
+(define (fast-prime? n times)
+	(cond ((= times 0) true)
+				((fermat-test b) (fast-prime? n (- times 1)))
+				(else false)))
