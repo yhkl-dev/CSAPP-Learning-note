@@ -34,3 +34,42 @@ void inTreading(biThrTree p) {
 		inTreading(p->right);
 	}
 }
+
+bool inOrderTraverseTree(biThrTree T) {
+	biThrTree p;
+	p = T->left;
+	while (p != T) {
+		while (p->leftTag == Link) {
+			p = p->left;
+		}
+		printf("%c", p->data);
+		while (p->rightTag == Thread && p->right != T) {
+			p = p->right;
+			printf("%c", p->data);
+		}
+		p = p->left;
+	}
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
