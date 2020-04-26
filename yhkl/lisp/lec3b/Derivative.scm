@@ -38,3 +38,12 @@
 
 (define M1 cadr)
 (define M2 caddr)
+
+(define (make-sum A1 A2)
+	(cond ((and (number? A1)
+							(number? A2)
+							)
+				 (+ A1 A2))
+				((and (number? A1) (= A1 0)) A2 )
+				((and (number? A2) (= A2 0)) A1)
+				(else (list '+ A1 A2))))
