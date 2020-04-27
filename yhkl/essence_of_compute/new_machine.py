@@ -1,4 +1,5 @@
-from semantic import Number, Add, LessThan, Variable, Assign, If, Boolean,DoNothing
+from semantic import Number, Add, LessThan, Variable, Assign, If, \
+        Boolean, DoNothing, Sequence, While, Multiply
 
 
 class Machine(object):
@@ -38,4 +39,22 @@ if __name__ == "__main__":
         DoNothing()
         ),
         {"x": Boolean(True)}
+    ).run()
+    print("\n")
+    print("-" * 10)
+    Machine(
+        Sequence(
+            Assign("x", Add(Number(1), Number(2))),
+            Assign("y", Add(Variable("x"), Number(3)))
+        ),
+        {}
+    ).run()
+
+    print("-" * 10)
+    Machine(
+        While(
+            LessThan(Variable("x"), Number(5)),
+            Assign("x", Multiply(Variable("x"), Number(3))),
+        ),
+        {"x": Number(1)},
     ).run()

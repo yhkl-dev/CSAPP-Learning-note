@@ -151,10 +151,48 @@ class If(object):
             return [If(self.condition.reduce(environment), self.consequence, self.alternative), 
                     environment]
         else:
-            if Boolean(True):
+            if eval(str(self.condition)):
                 return [self.consequence, environment]
-            if Boolean(False):
+            else:
                 return [self.alternative, environment]
+
+
+class Sequence(object):
+
+    def __init__(self, first, second):
+        self.first = first
+        self.second = second
+
+    def __str__(self):
+        return "{}; {}".format(self.first, self.second)
+
+    def reducible(self):
+        return True
+
+    def reduce(self, environment):
+        if isinstance(self.first, DoNothing):
+            return [self.second, environment]
+        else:
+            reduce_first, reduce_environment = self.first.reduce(environment)
+            return [Sequence(reduce_first, self.second), reduce_environment]
+
+
+class While(object):
+
+    def __init__(self, condition, body):
+        self.condition = condition
+        self.body = body
+
+    def __str__(self):
+        return "while (%s) { %s }" % (self.condition, self.body)
+
+    def reducible(self):
+        return True
+
+    def reduce(self, environment):
+        return [If(self.condition, Sequence(self.body, self), DoNothing()), environment]
+
+
 
 if __name__ == "__main__":
     environment = {"x": Number(2)}
