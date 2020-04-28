@@ -28,7 +28,7 @@ class Add(object):
         if self.right.reducible():
             return Add(self.left, self.right.reduce(environment))
         else:
-            return Number(eval(self.__str__()))
+            return Number(eval(str(self.left)) + eval(str(self.right)))
 
 
 class Multiply(object):
@@ -49,7 +49,7 @@ class Multiply(object):
         if self.right.reducible():
             return Multiply(self.left, self.right.reduce(environment))
         else:
-            return Number(eval(self.__str__()))
+            return Number(eval(str(self.left)) * eval(str(self.right)))
 
 
 class Boolean(object):
@@ -82,6 +82,7 @@ class LessThan(object):
         elif self.right.reducible():
             return LessThan(self.left, self.right.reduce(environment))
         else:
+            print(Boolean(eval(self.__str__())))
             return Boolean(eval(self.__str__()))
 
 
@@ -97,7 +98,7 @@ class Variable(object):
         return True
 
     def reduce(self, environment):
-        return environment[str(self.name)]
+        return environment[self.name]
 
 
 class DoNothing(object):
@@ -170,7 +171,7 @@ class Sequence(object):
         return True
 
     def reduce(self, environment):
-        if isinstance(self.first, DoNothing):
+        if DoNothing().eq(self.first):
             return [self.second, environment]
         else:
             reduce_first, reduce_environment = self.first.reduce(environment)

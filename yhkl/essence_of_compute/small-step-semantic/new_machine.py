@@ -20,6 +20,12 @@ class Machine(object):
 
 
 if __name__ == "__main__":
+    '''
+    print(Number(2))
+    print(Add(Number(2), Number(5)))
+    print(LessThan(Number(5), Add(Number(2), Number(10))))
+    print("-" * 20)
+    print({"x": Number(2)})
     Machine(
        Assign("x", Add(Variable("x"), Number(1))),
         {"x": Number(2)}
@@ -49,7 +55,7 @@ if __name__ == "__main__":
         ),
         {}
     ).run()
-
+    '''
     print("-" * 10)
     Machine(
         While(
