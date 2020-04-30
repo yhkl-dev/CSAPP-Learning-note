@@ -29,6 +29,24 @@ class DFARuleBook(object):
             if rule.applies_to(state, character):
                 return rule.follow()
 
+class DFA(object):
+
+    def __init__(self, current_state, accept_states, rulebook):
+        self.current_state = current_state
+        self.accept_states = accept_states
+        self.rulebook = rulebook
+
+    def is_accepting(self):
+        return self.current_state in self.accept_states
+
+    def read_character(self, character):
+        self.current_state = self.rulebook.next_state(self.current_state,
+                                                      character)
+
+    def read_string(self, string):
+        for char in string:
+            self.read_character(char)
+
 
 if __name__ == "__main__":
     rule_book = DFARuleBook(
@@ -43,3 +61,23 @@ if __name__ == "__main__":
     print(rule_book.next_state(1, 'a'))
     print(rule_book.next_state(1, 'b'))
     print(rule_book.next_state(2, 'b'))
+    print(DFA(1, [1, 3], rule_book).is_accepting())
+    print(DFA(1, [3], rule_book).is_accepting())
+
+    dfa = DFA(1, [3], rule_book)
+    print(dfa.is_accepting())
+    dfa.read_character("b")
+    print(dfa.is_accepting())
+    dfa.read_character("a")
+    dfa.read_character("a")
+    dfa.read_character("a")
+    print(dfa.is_accepting())
+    dfa.read_character("b")
+    print(dfa.is_accepting())
+
+    
+    dfa = DFA(1, [3], rule_book)
+    print(dfa.is_accepting())
+    print("-" * 100)
+    dfa.read_string("baaab")
+    print(dfa.is_accepting())
