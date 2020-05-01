@@ -48,6 +48,21 @@ class DFA(object):
             self.read_character(char)
 
 
+class DFADesign(object):
+    def __init__(self, start_state, accept_states, rulebook):
+        self.start_state = start_state
+        self.accept_states = accept_states
+        self.rulebook = rulebook
+
+    def to_dfa(self):
+        return DFA(self.start_state, self.accept_states, self.rulebook)
+
+    def is_accepting(self, string):
+        dfa = self.to_dfa()
+        dfa.read_string(string)
+        return dfa.is_accepting()
+
+
 if __name__ == "__main__":
     rule_book = DFARuleBook(
         [
@@ -81,3 +96,13 @@ if __name__ == "__main__":
     print("-" * 100)
     dfa.read_string("baaab")
     print(dfa.is_accepting())
+
+    print("-" * 100)
+
+    dfa_design = DFADesign(1, [3], rule_book)
+
+    print(dfa_design.is_accepting("a"))
+    print(dfa_design.is_accepting("baa"))
+    print(dfa_design.is_accepting("baba"))
+
+
