@@ -3,9 +3,15 @@ class Pattern(object):
     def __init__(self, precedence):
         self.precedence = precedence
 
-    def bracket(outer_precedence):
+    def bracket(self, outer_precedence):
         if self.precedence < outer_precedence:
-            return "({})".format(self.to_s())
+            return "({})".format(self.__str__())
+        else:
+            return self.__str__()
+
+#    def __str__(self):
+ #       return "//"
+
 
 
 class Empty(Pattern):
@@ -13,7 +19,7 @@ class Empty(Pattern):
     def __init__(self):
         self.precedence = 3
 
-    def to_s(self):
+    def __str__(self):
         return ''
 
 
@@ -24,7 +30,7 @@ class Literal(Pattern):
         self.character = character
         self.precedence = 3
 
-    def to_s(self):
+    def __str__(self):
         return self.character
 
 
@@ -36,7 +42,7 @@ class Concatenate(Pattern):
         self.first = first
         self.second = second
 
-    def to_s(self):
+    def __str__(self):
         return "|".join(list(map(self.bracket, [self.first, self.second])))
 
 
@@ -48,8 +54,26 @@ class Choose(Pattern):
         self.first = first
         self.second = second
 
-    def to_s(self):
+    def __str__(self):
+        print(self.precedence)
         return "|".join(list(map(self.bracket, [self.first, self.second])))
 
 
-class 
+class Repeat(Pattern):
+    def __init__(self, pattern):
+        super(Pattern, self).__init__()
+        self.precedence = 2
+        self.pattern = pattern
+
+    def __str__(self):
+        print(self.precedence)
+        return "*{}".format(self.pattern.bracket(self.precedence))
+
+if __name__ == "__main__":
+    pattern = Repeat(
+        Choose(
+            Concatenate(Literal("a"), Literal("b")), 
+            Literal("a")
+        )
+    )
+    print(pattern)
