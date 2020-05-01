@@ -32,12 +32,24 @@ class Concatenate(Pattern):
 
     def __init__(self, first, second):
         super(Pattern, self).__init__()
-        self.precedence = 3
+        self.precedence = 1
         self.first = first
         self.second = second
 
     def to_s(self):
-        return [self.first, self.second]
+        return "|".join(list(map(self.bracket, [self.first, self.second])))
 
 
+class Choose(Pattern):
+    
+    def __init__(self, first, second):
+        super(Pattern, self).__init__()
+        self.precedence = 0
+        self.first = first
+        self.second = second
 
+    def to_s(self):
+        return "|".join(list(map(self.bracket, [self.first, self.second])))
+
+
+class 
