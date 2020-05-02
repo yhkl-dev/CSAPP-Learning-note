@@ -1,3 +1,6 @@
+from nfa import NFARulebook, NFADesign, FARule
+
+
 class Pattern(object):
     precedence = 0
 
@@ -14,6 +17,12 @@ class Empty(Pattern):
     def __str__(self):
         return ''
 
+    def to_nfa_design(self):
+        start_state = None
+        accept_states = [start_state]
+        nfa = NFADesign(start_state, accept_states, NFARulebook([]))
+        return nfa
+
 
 class Literal(Pattern):
     precedence = 3
@@ -23,6 +32,14 @@ class Literal(Pattern):
 
     def __str__(self):
         return '{}'.format(self.character)
+    
+    def to_nfa_design(self):
+        start_state = type('', (), {})()
+        accept_states = type('', (), {})()
+        rule = FARule(start_state, self.character, accept_states)
+        rulebook = NFARulebook([rule])
+        nfa = NFADesign(start_state, [accept_states], rulebook)
+        return nfa
 
 
 class Concatenate(Pattern):
@@ -74,3 +91,12 @@ if __name__ == "__main__":
     )
 
     print('pattern', pattern)
+    
+    nfa_design = Empty().to_nfa_design()
+    print(nfa_design.is_accepting(""))
+    print(nfa_design.is_accepting("a"))
+
+    nfa_design = Literal('a').to_nfa_design()
+    print(nfa_design.is_accepting(""))
+    print(nfa_design.is_accepting("a"))
+    print(nfa_design.is_accepting("b"))
