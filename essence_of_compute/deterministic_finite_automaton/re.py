@@ -1,4 +1,4 @@
-from nfa import NFARulebook, NFADesign, FARule
+from free_move import NFARulebook, NFADesign, FARule
 
 
 class Pattern(object):
@@ -12,6 +12,7 @@ class Pattern(object):
 
     def match(self, string):
         return self.to_nfa_design().is_accepting(string)
+
 
 class Empty(Pattern):
     precedence = 3
@@ -62,7 +63,7 @@ class Concatenate(Pattern):
         start_state = first_nfa_design.start_state
         accept_states = second_nfa_design.accept_state
         rules = first_nfa_design.rulebook.rules + second_nfa_design.rulebook.rules
-        extra_rules =[FARule(state, None, second_nfa_design.start_state) for \
+        extra_rules =[FARule(state,None, second_nfa_design.start_state) for \
                       state in first_nfa_design.accept_state]
         rulebook = NFARulebook(rules + extra_rules)
         return NFADesign(start_state, accept_states, rulebook)
@@ -124,6 +125,7 @@ if __name__ == "__main__":
 
     print('pattern', pattern)
     
+    '''
     nfa_design = Empty().to_nfa_design()
     print(nfa_design.is_accepting(""))
     print(nfa_design.is_accepting("a"))
@@ -132,10 +134,18 @@ if __name__ == "__main__":
     print(nfa_design.is_accepting(""))
     print(nfa_design.is_accepting("a"))
     print(nfa_design.is_accepting("b"))
-    '''
     print("-" * 39)
     pattern = Concatenate(Literal('a'), Literal('b'))
     print("pattern", pattern)
-   # print("match", pattern.match('a'))
     print("match", pattern.match(''))
-    print("match", pattern.match('abc'))
+    print("match", pattern.match('ab'))
+    print("-" * 39)
+
+    pattern = Concatenate(
+        Literal('a'),
+        Concatenate(Literal('b'), Literal('c'))
+    )
+    print(pattern)
+    print(pattern.match('a'))
+    print(pattern.match('ab'))
+    print(pattern.match('abc'))
