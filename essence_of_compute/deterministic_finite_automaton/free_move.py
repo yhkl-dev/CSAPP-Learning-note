@@ -22,18 +22,17 @@ class NFARulebook(object):
         self.rules = rules
 
     def next_state(self, states, character):
-        return set(self.follow_rules_for(states, character))
+        n_states = []
+        for state in states:
+            s = self.follow_rules_for(state, character)
+            n_states += s
+        return set(n_states)
 
-    def follow_rules_for(self, states, character):
-        return self.rule_for(states, character)
+    def follow_rules_for(self, state, character):
+        return [rule.follow() for rule in self.rule_for(state, character)]
 
-    def rule_for(self, states, character):
-        state_list = []
-        for rule in self.rules:
-            for state in states:
-                if rule.applies_to(state, character):
-                    state_list.append(rule.follow())
-        return state_list
+    def rule_for(self, state, character):
+        return [rule for rule in self.rules if rule.applies_to(state, character)]
 
     def follow_free_moves(self, states):
         more_states = self.next_state(states, None)
@@ -51,8 +50,8 @@ class NFA(object):
         self.rulebook = rulebook
         self.current_state = self.rulebook.follow_free_moves(current_state) 
 
-    def is_accepting(self):
-        return bool(self.current_state.intersection(self.accept_state))
+    def accept(self):
+        return bool(self.current_state & set(self.accept_state)) 
 
     def read_string(self, string):
         for s in string:
@@ -73,7 +72,7 @@ class NFADesign(object):
     def is_accepting(self, string):
         nfa = self.to_nfa()
         nfa.read_string(string)
-        return nfa.is_accepting()
+        return nfa.accept()
 
     def to_nfa(self):
         return NFA(set([self.start_state]), self.accept_state, self.rulebook)
