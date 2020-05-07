@@ -140,7 +140,7 @@ if __name__ == "__main__":
     print("match", pattern.match(''))
     print("match", pattern.match('ab'))
     print("-" * 39)
-
+'''
     pattern = Concatenate(
         Literal('a'),
         Concatenate(Literal('b'), Literal('c'))
@@ -149,3 +149,4 @@ if __name__ == "__main__":
     print(pattern.match('a'))
     print(pattern.match('ab'))
     print(pattern.match('abc'))
+'''

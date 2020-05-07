@@ -60,6 +60,7 @@ class NFA(object):
     def read_character(self, character):
         self.current_state = self.rulebook.next_state(self.current_state,
                                                       character)
+        self.current_state = self.rulebook.follow_free_moves(self.current_state) 
 
 
 class NFADesign(object):
