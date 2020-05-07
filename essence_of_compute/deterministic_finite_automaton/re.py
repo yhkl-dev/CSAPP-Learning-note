@@ -81,6 +81,20 @@ class Choose(Pattern):
         return "{}".format('|'.join([self.first.bracket(self.precedence),
                                      self.second.bracket(self.precedence)]))
 
+    def to_nfa_design(self):
+        first_nfa_design = self.first.to_nfa_design()
+        second_nfa_design = self.second.to_nfa_design()
+        
+        start_state = type('', (), {})()
+        accept_states = first_nfa_design.accept_state + second_nfa_design.accept_state
+        rules = first_nfa_design.rulebook.rules + second_nfa_design.rulebook.rules
+        extra_rules = [FARule(start_state, None, nfa_design.start_state) for
+                       nfa_design in [first_nfa_design, second_nfa_design]]
+
+        rulebook = NFARulebook(rules + extra_rules)
+        return NFADesign(start_state, accept_states, rulebook)
+
+
 
 class Repeat(Pattern):
     precedence = 2
@@ -91,7 +105,22 @@ class Repeat(Pattern):
     def __str__(self):
         return self.pattern.bracket(self.precedence) + "*"
 
+    def to_nfa_design(self):
+        pattern_nfa_design = self.pattern.to_nfa_design()
 
+        start_state = type('', (), {})()
+        accept_states = pattern_nfa_design.accept_state + [start_state]
+
+        rules = pattern_nfa_design.rulebook.rules
+
+        extra_rules = [FARule(accept_state, None,
+                              pattern_nfa_design.start_state) for accept_state
+                      in pattern_nfa_design.accept_state] + \
+                [FARule(start_state, None, pattern_nfa_design.start_state)]
+
+        rulebook = NFARulebook(rules + extra_rules)
+        return NFADesign(start_state, accept_states, rulebook)
+    
 if __name__ == "__main__":
     '''
     print("-" * 39)
@@ -140,13 +169,15 @@ if __name__ == "__main__":
     print("match", pattern.match(''))
     print("match", pattern.match('ab'))
     print("-" * 39)
-'''
-    pattern = Concatenate(
-        Literal('a'),
-        Concatenate(Literal('b'), Literal('c'))
-    )
+    pattern = Choose(Literal('a'), Literal('b'))
     print(pattern)
-    print(pattern.match('a'))
-    print(pattern.match('ab'))
-    print(pattern.match('abc'))
-'''
+    print(pattern.match("a"))
+    print(pattern.match("b"))
+    print(pattern.match("c"))
+    print("-" * 39)
+    pattern = Repeat(Literal('a')) 
+    print(pattern)
+    print(pattern.match(""))
+    print(pattern.match("a"))
+    print(pattern.match("aaaa"))
+    print(pattern.match("b"))
