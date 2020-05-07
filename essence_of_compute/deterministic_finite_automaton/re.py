@@ -71,7 +71,7 @@ class Concatenate(Pattern):
 
 
 class Choose(Pattern):
-    precedence = 1
+    precedence = 0
 
     def __init__(self, first, second):
         self.first = first
@@ -144,16 +144,6 @@ if __name__ == "__main__":
     print("match", pattern.match('ab'))
     print("match", pattern.match('abc'))
 
-    print("-" * 39)
-    pattern = Repeat(
-        Choose(
-            Concatenate(Literal('a'), Literal('b')),
-            Literal('a')
-        )
-    )
-
-    print('pattern', pattern)
-    
     '''
     nfa_design = Empty().to_nfa_design()
     print(nfa_design.is_accepting(""))
@@ -181,3 +171,22 @@ if __name__ == "__main__":
     print(pattern.match("a"))
     print(pattern.match("aaaa"))
     print(pattern.match("b"))
+    print("-" * 39)
+    pattern = Repeat(
+        Concatenate(
+            Literal('a'),
+            Choose(Empty(), Literal('b'))
+        )
+    )
+    print(pattern)
+    print(pattern.match(''))
+    print(pattern.match('a'))
+    print(pattern.match('ab'))
+    print(pattern.match('aba'))
+    print(pattern.match('abab'))
+    print(pattern.match('abaab'))
+    print(pattern.match('abaab'))
+    print(pattern.match('abba'))
+    
+    
+    
