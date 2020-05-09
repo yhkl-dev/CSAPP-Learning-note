@@ -42,13 +42,16 @@ class NFARulebook(object):
         else:
             return self.follow_free_moves(more_states | states)
 
+    def alphabet(self):
+        return list(set([rule.character for rule in self.rules if
+                         rule.character]))
 
 class NFA(object):
     
     def __init__(self, current_state, accept_state, rulebook):
         self.accept_state = accept_state
         self.rulebook = rulebook
-        self.current_state = self.rulebook.follow_free_moves(current_state) 
+        self.current_state = frozenset(self.rulebook.follow_free_moves(current_state) )
 
     def accept(self):
         return bool(self.current_state & set(self.accept_state)) 
@@ -91,6 +94,21 @@ class NFASimulation(object):
         nfa.read_character(character)
         return nfa.current_state
 
+    def rules_for(self, state):
+        return [FARule(state, character, self.next_state(state, character)) for
+               character in self.nfa_design.rulebook.alphabet()]
+
+
+    def discover_states_and_rules(self, states):
+        rules = [self.rules_for(state) for state in states]
+        print(rules)
+        more_states = frozenset([ rule.follow() for rule in rules])
+
+        if more_states.issubset(states):
+            return [states, rules]
+        else:
+            return self.discover_states_and_rules(states | more_states)
+
 if __name__ == "__main__":
     rulebook = NFARulebook(
         [
@@ -111,3 +129,27 @@ if __name__ == "__main__":
     print(nfa.current_state)
 
 
+    print("-" * 100)
+    simulation = NFASimulation(nfa_design)
+    print(simulation.next_state({1, 2}, 'a'))
+    print(simulation.next_state({1, 2}, 'b'))
+    print(simulation.next_state({3, 2}, 'b'))
+    print(simulation.next_state({1, 3, 2}, 'b'))
+    print(simulation.next_state({1, 3, 2}, 'a'))
+    print("-" * 100)
+    print(rulebook.alphabet())
+    rules = simulation.rules_for(frozenset({1, 2}))
+    for r in rules:
+        print(r)
+    rules = simulation.rules_for(frozenset({3, 2}))
+    for r in rules:
+        print(r)
+
+    print("-" * 100)
+
+    start_state = nfa_design.to_nfa().current_state
+    print(start_state)
+    states, rules = simulation.discover_states_and_rules(frozenset(start_state))
+    #print(states)
+    #for r in rules:
+    #    print(r)
