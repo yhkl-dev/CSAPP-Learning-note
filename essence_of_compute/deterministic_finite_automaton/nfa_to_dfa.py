@@ -1,3 +1,6 @@
+from dfa import DFARuleBook, DFADesign
+
+
 class FARule(object):
 
     def __init__(self, state, character, new_state):
@@ -92,7 +95,7 @@ class NFASimulation(object):
     def next_state(self, state, character):
         nfa = self.nfa_design.to_nfa(state)
         nfa.read_character(character)
-        return nfa.current_state
+        return frozenset(nfa.current_state)
 
     def rules_for(self, state):
         return [FARule(state, character, self.next_state(state, character)) for
@@ -102,14 +105,20 @@ class NFASimulation(object):
         rules = []
         for state in states:
             rules += self.rules_for(state)
-        print(rules)
-        print('a', [rule.follow() for rule in rules])
         more_states = set([rule.follow() for rule in rules])
 
         if more_states.issubset(states):
             return [states, rules]
         else:
             return self.discover_states_and_rules(states | more_states)
+
+    def to_dfa_design(self):
+        start_state = self.nfa_design.to_nfa().current_state
+        states, rules = self.discover_states_and_rules({start_state})
+        accept_state = [state for state in
+                        states if self.nfa_design.to_nfa(state).accept()]
+        return DFADesign(start_state, accept_state, DFARuleBook(rules))
+
 
 if __name__ == "__main__":
     rulebook = NFARulebook(
@@ -152,6 +161,15 @@ if __name__ == "__main__":
     start_state = nfa_design.to_nfa().current_state
     print(start_state)
     states, rules = simulation.discover_states_and_rules(set([start_state]))
-    #print(states)
+    print(states)
     for r in rules:
         print(r)
+    print("-" * 100)
+    print(nfa_design.to_nfa({1, 2}).accept())
+    print(nfa_design.to_nfa({3, 2}).accept())
+    print("-" * 100)
+
+    dfa_design = simulation.to_dfa_design()
+    print(dfa_design.is_accepting('aaa'))
+    print(dfa_design.is_accepting('aab'))
+    print(dfa_design.is_accepting('bbbabb'))
