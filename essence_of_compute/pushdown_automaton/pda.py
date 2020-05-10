@@ -31,8 +31,9 @@ class PDARule(object):
 
         poped_stack = configuration.stack.pop()
         for s in self.push_character.reverse():
-            starck = poped_stack.
+            poped_stack = poped_stack.push(s)
 
+        return poped_stack
 
     
 
