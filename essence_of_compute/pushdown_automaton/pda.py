@@ -25,7 +25,6 @@ class PDARule(object):
                 self.character == character
 
     def follow(self, configuration):
-        print('2')
         return PDAConfiguration(self.next_state, self.next_stack(configuration))
 
     def next_stack(self, configuration):
@@ -45,17 +44,13 @@ class DPDARulebook(object):
 
     def next_configuration(self, configuration, character):
         rule = self.rule_for(configuration, character)
-        print('rule', rule.__dict__)
-        print(type(rule))
         return rule.follow(configuration)
 
     def rule_for(self, configuration, character):
         for rule in self.rules:
             if rule.applies_to(configuration, character):
-                print('1')
-                print(rule)
-                return rule 
-
+                return rule
+            
 
 class DPDA(object):
 
@@ -73,6 +68,7 @@ class DPDA(object):
 
     def read_string(self, string):
         for s in string:
+            print('s', s)
             self.read_character(s)
 
 if __name__ == '__main__':
@@ -89,11 +85,14 @@ if __name__ == '__main__':
         PDARule(2, None, 1, '$', ['$']),
     ])
     configuration = rulebook.next_configuration(configuration, '(')
+    configuration = rulebook.next_configuration(configuration, '(')
+    configuration = rulebook.next_configuration(configuration, ')')
     print(configuration)
 
     print('-' * 100)
     dpda = DPDA(PDAConfiguration(1, Stack(['$'])), [1], rulebook)
     print(dpda.accepting())
-    dpda.read_string("(()")
-    print(dpda.accepting())
+    #dpda.read_string("(()")
+    print('y-' * 100)
+    #print(dpda.accepting())
     
