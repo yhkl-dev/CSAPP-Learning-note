@@ -17,15 +17,16 @@ class PDARule(object):
         self.next_state = next_state
         self.pop_character = pop_character
         self.push_character = push_character
-    
 
     def applies_to(self, configuration, character):
         return self.state == configuration.state and \
-                self.pop_character == configuration.stack.top() and \
-                self.character == character
+            self.pop_character == configuration.stack.top() and \
+            self.character == character
 
     def follow(self, configuration):
-        return PDAConfiguration(self.next_state, self.next_stack(configuration))
+        return PDAConfiguration(
+            self.next_state,
+            self.next_stack(configuration))
 
     def next_stack(self, configuration):
 
@@ -50,7 +51,7 @@ class DPDARulebook(object):
         for rule in self.rules:
             if rule.applies_to(configuration, character):
                 return rule
-            
+
 
 class DPDA(object):
 
@@ -63,19 +64,37 @@ class DPDA(object):
         return self.current_configuration.state in self.accept_states
 
     def read_character(self, character):
-        self.current_configuration = \
-                self.rulebook.next_configuration(self.current_configuration, character)
+        self.current_configuration = self.rulebook.next_configuration(
+            self.current_configuration, character)
 
     def read_string(self, string):
         for s in string:
             print('s', s)
             self.read_character(s)
 
+
+class DPDADesign(object):
+
+    def __init__(self, start_state, bottom_character, accept_states, rulebook):
+        self.start_state = start_state
+        self.bottom_character = bottom_character
+        self.accept_states = accept_states
+        self.rulebook = rulebook
+
+    def accepting(self, string):
+        return self.to_dpda().read_string(string).accepting()
+
+    def to_dpda(self):
+        start_stack = Stack([bottom_character])
+        start_configuration = PDAConfiguration(self.start_state, start_stack)
+        return DPDA(start_configuration, self.accept_states, self.rulebook)
+
+
 if __name__ == '__main__':
     rule = PDARule(1, '(', 2, '$', ['b', '$'])
     configuration = PDAConfiguration(1, Stack(['$']))
     print(rule.applies_to(configuration, '('))
-    
+
     print('-' * 100)
 
     rulebook = DPDARulebook([
@@ -92,7 +111,6 @@ if __name__ == '__main__':
     print('-' * 100)
     dpda = DPDA(PDAConfiguration(1, Stack(['$'])), [1], rulebook)
     print(dpda.accepting())
-    #dpda.read_string("(()")
+    # dpda.read_string("(()")
     print('y-' * 100)
-    #print(dpda.accepting())
-    
+    # print(dpda.accepting())
