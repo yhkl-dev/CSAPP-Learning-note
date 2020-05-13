@@ -2,10 +2,17 @@ from stack import Stack
 
 
 class PDAConfiguration(object):
+    STUCK_STATE = type("", (), {})()
 
     def __init__(self, state, stack):
         self.state = state
         self.stack = stack
+
+    def stuck(self):
+        return PDAConfiguration(self.STUCK_STATE, self.stack)
+
+    def is_stuck(self):
+        return self.state == self.STUCK_STATE
 
 
 class PDARule(object):
@@ -73,6 +80,7 @@ class DPDA(object):
             self.read_character(s)
 
 
+    
 class DPDADesign(object):
 
     def __init__(self, start_state, bottom_character, accept_states, rulebook):
