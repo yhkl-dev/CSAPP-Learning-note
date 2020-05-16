@@ -35,7 +35,9 @@ class NFARulebook(object):
         return [rule.follow() for rule in self.rule_for(state, character)]
 
     def rule_for(self, state, character):
-        return [rule for rule in self.rules if rule.applies_to(state, character)]
+        return [
+            rule for rule in self.rules if rule.applies_to(
+                state, character)]
 
     def follow_free_moves(self, states):
         more_states = self.next_state(states, None)
@@ -49,15 +51,17 @@ class NFARulebook(object):
         return list(set([rule.character for rule in self.rules if
                          rule.character]))
 
+
 class NFA(object):
-    
+
     def __init__(self, current_state, accept_state, rulebook):
         self.accept_state = accept_state
         self.rulebook = rulebook
-        self.current_state = frozenset(self.rulebook.follow_free_moves(current_state) )
+        self.current_state = frozenset(
+            self.rulebook.follow_free_moves(current_state))
 
     def accept(self):
-        return bool(self.current_state & set(self.accept_state)) 
+        return bool(self.current_state & set(self.accept_state))
 
     def read_string(self, string):
         for s in string:
@@ -66,7 +70,8 @@ class NFA(object):
     def read_character(self, character):
         self.current_state = self.rulebook.next_state(self.current_state,
                                                       character)
-        self.current_state = self.rulebook.follow_free_moves(self.current_state) 
+        self.current_state = self.rulebook.follow_free_moves(
+            self.current_state)
 
 
 class NFADesign(object):
@@ -90,7 +95,7 @@ class NFADesign(object):
 class NFASimulation(object):
 
     def __init__(self, nfa_design):
-        self.nfa_design = nfa_design 
+        self.nfa_design = nfa_design
 
     def next_state(self, state, character):
         nfa = self.nfa_design.to_nfa(state)
@@ -99,7 +104,7 @@ class NFASimulation(object):
 
     def rules_for(self, state):
         return [FARule(state, character, self.next_state(state, character)) for
-               character in self.nfa_design.rulebook.alphabet()]
+                character in self.nfa_design.rulebook.alphabet()]
 
     def discover_states_and_rules(self, states):
         rules = []
@@ -138,7 +143,6 @@ if __name__ == "__main__":
     nfa = nfa_design.to_nfa({2, 3})
     nfa.read_character('b')
     print(nfa.current_state)
-
 
     print("-" * 100)
     simulation = NFASimulation(nfa_design)
