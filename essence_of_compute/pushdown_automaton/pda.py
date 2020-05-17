@@ -14,6 +14,10 @@ class PDAConfiguration(object):
     def is_stuck(self):
         return self.state == self.STUCK_STATE
 
+    def __str__(self):
+        return "struct PDAConfiguration state={} stack={}".format(self.state,
+                                                                  self.stack)
+
 
 class PDARule(object):
 
@@ -76,9 +80,7 @@ class DPDA(object):
 
     def read_string(self, string):
         for s in string:
-            print('s', s)
             self.read_character(s)
-
 
     
 class DPDADesign(object):
@@ -120,5 +122,4 @@ if __name__ == '__main__':
     dpda = DPDA(PDAConfiguration(1, Stack(['$'])), [1], rulebook)
     print(dpda.accepting())
     # dpda.read_string("(()")
-    print('y-' * 100)
     # print(dpda.accepting())
