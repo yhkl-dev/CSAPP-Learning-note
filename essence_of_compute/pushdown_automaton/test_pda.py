@@ -30,6 +30,8 @@ class TestPDA(unittest.TestCase):
         print(configuration)
         configuration = self.rulebook.next_configuration(configuration, ')')
         print(configuration)
+        configuration = PDAConfiguration(1, Stack(['$']))       
+        print('>>>', self.rulebook.follow_free_moves(configuration))
 
     def test_dpda(self):
         dpda = DPDA(PDAConfiguration(1, Stack(['$'])), [1], self.rulebook)

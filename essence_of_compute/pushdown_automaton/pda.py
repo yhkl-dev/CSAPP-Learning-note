@@ -63,6 +63,15 @@ class DPDARulebook(object):
             if rule.applies_to(configuration, character):
                 return rule
 
+    def applies_to(self, configuration, character):
+        return bool(self.rule_for(configuration, character))
+
+    def follow_free_moves(self, configuration):
+        if self.applies_to(configuration, None):
+            return self.follow_free_moves(self.next_configuration(configuration, None))
+        else:
+            return configuration
+
 
 class DPDA(object):
 
