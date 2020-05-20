@@ -1,16 +1,4 @@
-'''
-    流程状态定义:
-        未提交 - UNCOMMITTED,
-        审核通过 - VERIFIED,
-        审核驳回 - REJECTED,
-        等待执行 - UNEXECUTED,
-        执行中 - EXECUTING,
-        执行完成 - EXECUTED,
-        执行失败 - FALIED,
-        用户确认 - CONFIRM
-        关闭 - CLOSED,
 
-'''
 
 class FARule(object):
 
