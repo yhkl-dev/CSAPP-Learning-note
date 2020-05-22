@@ -33,11 +33,19 @@ RULEBOOK = DFARulebook(
         FARule('VERIFYING', 'VERIFY', 'VERIFIED'),
         FARule('VERIFYING', 'REJECT', 'VERIFYING'),
         FARule('VERIFYING', 'REVOKE', 'REVOKE-CLOSED'),
-        FARule('VERIFIED', None, 'EXECUTING'),
-        FARule('EXECUTED', 'CONFIRM-EXECUTE', 'EXECUTING'),
+        FARule('VERIFIED', 'CONFIRM-EXECUTE', 'EXECUTING'),
         FARule('EXECUTING', 'EXECUTE-DONE', 'EXECUTED'),
         FARule('EXECUTING', 'EXECUTE-FAILD', 'EXE-FAILED'),
         FARule('EXECUTED', 'CONFIRM', 'CLOSED'),
         FARule('EXE-FAILED', 'RE-EXECUTE', 'EXECUTING')
     ]
 )
+
+
+class Order(object):
+    
+    state = 'UNCOMMITED'
+
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
