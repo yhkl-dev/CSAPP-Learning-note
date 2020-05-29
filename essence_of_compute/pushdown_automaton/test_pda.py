@@ -14,6 +14,7 @@ class TestPDA(unittest.TestCase):
     	    PDARule(2, ')', 2, 'b', []),
         	PDARule(2, None, 1, '$', ['$']),
     	]) 
+        self.test = test
 
 
     def test_rule_applies_to(self):
