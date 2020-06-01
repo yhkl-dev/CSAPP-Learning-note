@@ -50,3 +50,6 @@ class Order(object):
         self.name = name
         self.description = description
         self.x = x
+
+    def receive_condition(self, condition):
+        print(condition)
