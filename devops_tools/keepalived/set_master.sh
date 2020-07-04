@@ -12,12 +12,12 @@ OWNPID=$$
 EXIST_NUM=$(ps -ef | grep -vw $OWNPID | grep set_master.sh | grep -v grep | awk '{print $2}' | wc -l)
 
 #判断进程是否已经被调用，防止重复调用
-#if [ $EXIST_NUM -gt 1 ];then
-#    echo "$(date +\"%Y%m%d-%H:%M:%S\")" >> $STATUS_LOG
-#    echo "Script set_master.sh already exists!" >> $STATUS_LOG
+if [ $EXIST_NUM -gt 1 ];then
+    echo "$(date +\"%Y%m%d-%H:%M:%S\")" >> $STATUS_LOG
+    echo "Script set_master.sh already exists!" >> $STATUS_LOG
     #如果进程未完全停止，会不停的调用chk_mysql.sh脚本
-#    exit 0
-#fi
+    exit 0
+fi
 
 mysql  -P$PORT -u$USER -p$PASSWORD -e "start slave;"
 
