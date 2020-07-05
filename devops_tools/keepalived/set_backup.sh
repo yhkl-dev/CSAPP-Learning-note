@@ -11,12 +11,12 @@ OWNPID=$$
 EXIST_NUM=$(ps -ef | grep -vw $OWNPID | grep set_backup.sh | grep -v grep | awk '{print $2}' | wc -l)
 
 #判断进程是否已经被调用，防止重复调用
-#if [ $EXIST_NUM -gt 1 ];then
-#    echo "$(date +\"%Y%m%d-%H:%M:%S\")" >> $STATUS_LOG
-#    echo "Script set_backup.sh already exists!" >> $STATUS_LOG
+if [ $EXIST_NUM -gt 1 ];then
+    echo "$(date +\"%Y%m%d-%H:%M:%S\")" >> $STATUS_LOG
+    echo "Script set_backup.sh already exists!" >> $STATUS_LOG
     #如果进程未完全停止，会不停的调用chk_mysql.sh脚本
-#    exit 0
-#fi
+    exit 0
+fi
 
 #从库打开read_only，防止意外写入
 mysql  -P$PORT -u$USER -p$PASSWORD -e "start slave;set sql_log_bin=0; set innodb_lock_wait_timeout=3; set lock_wait_timeout=3; set global read_only=1; set global super_read_only=1;"
