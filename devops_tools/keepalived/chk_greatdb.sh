@@ -12,9 +12,9 @@ echo "$(date +\"%Y%m%d-%H:%M:%S\")" >> $CHKLOG
 EXIST_NUM=$(ps -ef | grep chk_mysql.sh | grep -v grep | awk '{print $2}' | wc -l)
 
 #判断进程是否已经被调用，防止重复调用
-#if [ $EXIST_NUM -gt 2 ];then
-#    exit 0
-#fi
+if [ $EXIST_NUM -gt 2 ];then
+    exit 0
+fi
 
 counter=`ps -ef | grep -w mysqld | grep $PORT | grep -v grep | wc -l`
 mysql -u$USER -p$PASSWORD -P$PORT -e "show slave status\G;" >$CHKTMPFILE 2>> $CHKLOG
