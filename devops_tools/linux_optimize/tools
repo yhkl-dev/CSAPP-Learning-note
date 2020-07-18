@@ -3,6 +3,5 @@ sysstat
 top
 free
 
-
 uptime 
-	man uptime
+  man uptime
