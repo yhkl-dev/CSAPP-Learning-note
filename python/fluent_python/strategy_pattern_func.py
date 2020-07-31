@@ -4,6 +4,9 @@ from collections import namedtuple
 Customer = namedtuple('Customer', 'name fidelity')
 
 
+def best_promo(order):
+    return max(promo(order) for promo in promos)
+
 class LineItem:
 
     def __init__(self, product, quantity, price):
@@ -56,6 +59,10 @@ def large_order_promo(order):
         return order.total() * .07
     return 0
 
+# promos = [fidelity_promo, bulk_item_promo, large_order_promo]
+
+promos = [globals()[name] for name in globals() if name.endswith("_promo") and
+         name != 'best_promo']
 if __name__ == "__main__":
     joe = Customer("John Doe", 0)
     ann = Customer("Ann Smith", 1100)
@@ -74,3 +81,6 @@ if __name__ == "__main__":
 
     long_order = [LineItem(str(item_code), 1, 1.0) for item_code in range(10)]
     print(Order(joe, long_order, large_order_promo))
+
+    print(Order(joe, long_order, best_promo))
+
