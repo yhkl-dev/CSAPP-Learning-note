@@ -23,7 +23,7 @@ class Order:
         self.promotion = promotion
 
     def total(self):
-        if not hasattr(self, "__total__"):
+        if not hasattr(self, "_total"):
             self._total = sum(item.total() for item in self.cart)
         return self._total
 
