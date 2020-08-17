@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from collections import namedtuple
+import promotions
+import inspect 
 
 Customer = namedtuple('Customer', 'name fidelity')
 
@@ -61,8 +63,13 @@ def large_order_promo(order):
 
 # promos = [fidelity_promo, bulk_item_promo, large_order_promo]
 
-promos = [globals()[name] for name in globals() if name.endswith("_promo") and
-         name != 'best_promo']
+# promos = [globals()[name] for name in globals() if name.endswith("_promo") and
+#         name != 'best_promo']
+
+promos = [func for name, func in inspect.getmembers(promotions,
+                                                    inspect.isfunction)]
+
+
 if __name__ == "__main__":
     joe = Customer("John Doe", 0)
     ann = Customer("Ann Smith", 1100)
