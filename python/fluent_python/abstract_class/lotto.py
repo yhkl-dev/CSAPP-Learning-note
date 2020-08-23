@@ -6,7 +6,7 @@ from tombola import Tombola
 class LotteryBlower(Tombola):
 
     def __init__(self, iterable):
-        self._balls.extend(iterable)
+        self._balls = list(iterable)
 
     def load(self, iterable):
         self._balls.extend(iterable)
