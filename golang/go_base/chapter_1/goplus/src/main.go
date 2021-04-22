@@ -2,8 +2,15 @@ package main
 
 import (
 	"fmt"
+	"goplus/goplus/src/Object"
 	"goplus/goplus/src/String"
 )
+
+func change(u Object.User) Object.User {
+	u.Id = 202
+
+	return u
+}
 
 func main() {
 	s := String.NewString("abc上开")
@@ -25,4 +32,10 @@ func main() {
 	fmt.Println([]byte(s))
 	fmt.Println([]int32(s))
 	fmt.Printf("%c\n", 24320)
+
+	u := Object.NewUser()
+	fmt.Println(u)
+	u.Id = 101
+	u = change(u)
+	fmt.Printf("%+v", u)
 }
