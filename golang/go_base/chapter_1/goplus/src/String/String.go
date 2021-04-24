@@ -8,6 +8,12 @@ func (s String) Len() int {
 	return len(s)
 }
 
+func (s String) Each(f func(item string)) {
+	for _, c := range s {
+		f(fmt.Sprintf("%c", c))
+	}
+}
+
 func NewString(str string) String {
 	return String(str)
 }
