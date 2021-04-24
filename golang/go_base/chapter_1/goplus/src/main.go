@@ -17,4 +17,12 @@ func main() {
 	s.Each(func(item string) {
 		fmt.Println(item)
 	})
+
+	for i := 0; i < len(s); i++ {
+		fmt.Println(i, " ", s[i], fmt.Sprintf("%T", s[i]))
+	}
+
+	fmt.Println([]byte(s))
+	fmt.Println([]int32(s))
+	fmt.Printf("%c\n", 24320)
 }
