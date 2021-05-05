@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"sync"
+	"time"
 )
 
 // 如何精确处理共享内存
@@ -17,7 +18,19 @@ func main() {
 		}(i)
 	}
 	wg.Wait()
-	x()
+
+	/*
+		x := make(chan int, 3)
+
+			r := make(chan struct{})
+			go producer(x)
+			go consumer(x, r)
+			<-r
+	*/
+	x := make(chan int, 3)
+	go producer(x)
+	r := consumer2(x)
+	<-r
 }
 
 func x() {
@@ -30,4 +43,31 @@ func x() {
 	for i := 0; i < cap(c); i++ {
 		fmt.Println(<-c)
 	}
+}
+
+func producer(out chan int) {
+	defer close(out)
+	for i := 0; i < 5; i++ {
+		out <- i * 2
+		time.Sleep(time.Second * 2)
+	}
+}
+
+func consumer(out chan int, r chan struct{}) {
+	for item := range out {
+		fmt.Println(item)
+	}
+	r <- struct{}{}
+}
+func consumer2(out chan int) (r chan struct{}) {
+	r = make(chan struct{})
+	go func() {
+		defer func() {
+			r <- struct{}{}
+		}()
+		for item := range out {
+			fmt.Println(item)
+		}
+	}()
+	return r
 }
