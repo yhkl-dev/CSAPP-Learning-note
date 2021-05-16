@@ -6,6 +6,12 @@ type User struct {
 	Name string
 }
 
-func NewUser() User {
-	return User{}
+func UserWithID(id int) func(u *User) {
+	return func(u *User) {
+		u.Id = id
+	}
+}
+
+func NewUser() *User {
+	return &User{}
 }
