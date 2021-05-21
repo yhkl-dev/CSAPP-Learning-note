@@ -6,14 +6,8 @@ type User struct {
 	Name string
 }
 
-func WithUserID(id int) func(u *User) {
-	return func(u *User) {
-		u.Id = id
-	}
-}
-
-func NewUser(f func(u *User)) *User {
+func NewUser(fs ...UserAttrFunc) *User {
 	u := new(User)
-	f(u)
+	UserAttrFuncs(fs).apply(u)
 	return u
 }
