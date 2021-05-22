@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-	"sync/atomic"
 )
 
 /*
@@ -18,13 +17,17 @@ import (
 */
 func main() {
 	fmt.Println("vim-go")
-	var n int32 = 0
+	n := 0
+	locker := sync.Mutex{}
 	wg := sync.WaitGroup{}
 	for i := 0; i < 1000000; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			atomic.AddInt32(&n, 1)
+			defer locker.Unlock()
+			locker.Lock()
+			n++
+
 		}()
 	}
 	wg.Wait()
