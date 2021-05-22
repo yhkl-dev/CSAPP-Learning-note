@@ -18,15 +18,18 @@ import (
 func main() {
 	fmt.Println("vim-go")
 	n := 0
+	locker := sync.Mutex{}
 	wg := sync.WaitGroup{}
 	for i := 0; i < 1000000; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
+			defer locker.Unlock()
+			locker.Lock()
 			n++
 
 		}()
 	}
-	wg.Done()
+	wg.Wait()
 	fmt.Println(n)
 }
