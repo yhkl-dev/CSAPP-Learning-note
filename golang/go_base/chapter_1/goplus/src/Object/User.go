@@ -2,7 +2,7 @@ package Object
 
 type User struct {
 	Id   int
-	Sex  int
+	Sex  byte
 	Name string
 }
 

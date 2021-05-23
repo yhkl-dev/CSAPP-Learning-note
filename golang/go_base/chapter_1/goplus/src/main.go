@@ -2,69 +2,59 @@ package main
 
 import (
 	"fmt"
-	"goplus/src/Map"
-	"goplus/src/Object"
-	"sort"
+	"reflect"
 )
 
-// func change(u Object.User) Object.User {
-// 	u.Id = 202
-
-// 	return u
-// }
+type User struct {
+	UserId   int
+	UserName string
+}
 
 func main() {
-	/*
-		s := String.NewString("abc上开")
-		fmt.Println(s)
-		fmt.Println("vim-go")
-		s1 := String.FromInt(123)
-		fmt.Println(s1)
+	// // u := User{1, "yhkl"}
+	// u := User{}
+	// t := reflect.TypeOf(u)
+	// if t.Kind() == reflect.Ptr {
+	// 	t = t.Elem()
+	// }
+	// // fmt.Println(t.Name())
+	// for i := 0; i < t.NumField(); i++ {
+	// 	fmt.Println(t.Field(i).Name)
+	// }
 
-		fmt.Println(s1.Len())
+	// u1 := &User{1, "yhkl"}
+	// t1 := reflect.TypeOf(u1)
+	// if t1.Kind() == reflect.Ptr {
+	// 	t1 = t1.Elem()
+	// }
+	// // fmt.Println(t.Name())
+	// for i := 0; i < t1.NumField(); i++ {
+	// 	fmt.Println(t1.Field(i).Name)
+	// }
+	// t2 := reflect.ValueOf(u)
+	// for i := 0; i < t2.NumField(); i++ {
+	// 	if t2.Field(i).Kind() == reflect.Int {
+	// 		fmt.Println(t2.Field(i).Int())
+	// 	}
+	// 	if t2.Field(i).Kind() == reflect.String {
+	// 		fmt.Println(t2.Field(i).String())
+	// 	}
+	// 	fmt.Println(t2.Field(i).Interface())
+	// }
+	// fmt.Println(u)
 
-		s.Each(func(item string) {
-			fmt.Println(item)
-		})
+	u := &User{}
+	t := reflect.ValueOf(u)
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
 
-		for i := 0; i < len(s); i++ {
-			fmt.Println(i, " ", s[i], fmt.Sprintf("%T", s[i]))
+	values := []interface{}{2, "yhkl"}
+	for i := 0; i < t.NumField(); i++ {
+		if t.Field(i).Kind() == reflect.ValueOf(values[i]).Kind() {
+			t.Field(i).Set(reflect.ValueOf(values[i]))
 		}
-
-		fmt.Println([]byte(s))
-		fmt.Println([]int32(s))
-		fmt.Printf("%c\n", 24320)
-
-		u := Object.NewUser()
-		fmt.Println(u)
-		u.Id = 101
-		u = change(u)
-		fmt.Printf("%+v", u)
-	*/
-
-	u := Object.NewUser(
-		Object.WithUserID(120),
-		Object.WithUserName("yhkl"),
-	)
+	}
 	fmt.Println(u)
 
-	u1 := Map.NewUser()
-	u1.With("name", "weaponX").With("id", 100)
-
-	u2 := Map.NewUser()
-	u2.With("name", "yhkl").With("id", 101)
-
-	u3 := Map.NewUser()
-	u3.With("name", "xxx").With("id", 102)
-	users := []Map.User{}
-	users = append(users, u1, u2, u3)
-	sort.SliceStable(users, func(i, j int) bool {
-		id1 := users[i]["id"].(int) // 断言
-		id2 := users[j]["id"].(int) // 断言
-		return id1 < id2
-	})
-	fmt.Println(users)
-
-	var service Object.IService = Object.NewProdService()
-	service.Save()
 }

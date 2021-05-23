@@ -1,5 +1,6 @@
 package Object
 
 type IService interface {
-	Save()
+	Save(data interface{}) IService
+	List() IService
 }

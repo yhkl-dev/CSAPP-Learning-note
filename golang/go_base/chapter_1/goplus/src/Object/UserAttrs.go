@@ -20,3 +20,9 @@ func WithUserName(name string) UserAttrFunc {
 		u.Name = name
 	}
 }
+
+func WithUserSex(sex byte) UserAttrFunc {
+	return func(u *User) {
+		u.Sex = sex
+	}
+}
