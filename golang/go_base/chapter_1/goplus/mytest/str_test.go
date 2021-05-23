@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+var strs = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n"}
+
 func TestStr(t *testing.T) {
 	str := Utils.Join("abc", "bcd", "xyz")
 	t.Log(str)
@@ -28,5 +30,22 @@ func TestJoin(t *testing.T) {
 				t.Errorf("Join() = %v, want %v", got, tt.want)
 			}
 		})
+	}
+}
+
+func BenchmarkJoin(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Utils.Join(strs...)
+	}
+}
+
+func BenchmarkJoin2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Utils.Join2(strs...)
+	}
+}
+func BenchmarkJoin3(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Utils.Join3(strs...)
 	}
 }

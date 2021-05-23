@@ -65,4 +65,6 @@ func main() {
 	})
 	fmt.Println(users)
 
+	var service Object.IService = Object.NewProdService()
+	service.Save()
 }
