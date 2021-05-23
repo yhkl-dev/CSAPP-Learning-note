@@ -5,8 +5,9 @@ import (
 	"reflect"
 )
 
+// 只要tag里面有定义，就以tag为准，否则以属性为准
 type User struct {
-	UserId   int
+	UserId   int `name:"uid"`
 	UserName string
 }
 
@@ -17,16 +18,16 @@ func Map2Struct(m map[string]interface{}, u interface{}) {
 		if v.Kind() != reflect.Struct {
 			panic("must be struct")
 		}
-		findFromMap := func(key string) interface{} {
+		findFromMap := func(key string, nameTag string) interface{} {
 			for k, v := range m {
-				if k == key {
+				if k == key || k == nameTag {
 					return v
 				}
 			}
 			return nil
 		}
 		for i := 0; i < v.NumField(); i++ {
-			getValue := findFromMap(v.Type().Field(i).Name)
+			getValue := findFromMap(v.Type().Field(i).Name, v.Type().Field(i).Tag.Get("name"))
 			if getValue != nil && reflect.ValueOf(getValue).Kind() == v.Field(i).Kind() {
 				v.Field(i).Set(reflect.ValueOf(getValue))
 			}
@@ -69,27 +70,28 @@ func main() {
 	// }
 	// fmt.Println(u)
 
-	u := &User{}
-	t := reflect.ValueOf(u)
-	if t.Kind() == reflect.Ptr {
-		t = t.Elem()
-	}
+	// u := &User{}
+	// t := reflect.ValueOf(u)
+	// if t.Kind() == reflect.Ptr {
+	// 	t = t.Elem()
+	// }
 
-	values := []interface{}{2, "yhkl"}
-	for i := 0; i < t.NumField(); i++ {
-		if t.Field(i).Kind() == reflect.ValueOf(values[i]).Kind() {
-			t.Field(i).Set(reflect.ValueOf(values[i]))
-		}
-	}
-	fmt.Println(u)
+	// values := []interface{}{2, "yhkl"}
+	// for i := 0; i < t.NumField(); i++ {
+	// 	if t.Field(i).Kind() == reflect.ValueOf(values[i]).Kind() {
+	// 		t.Field(i).Set(reflect.ValueOf(values[i]))
+	// 	}
+	// }
+	// fmt.Println(u)
 
 	x := &User{}
 	m := map[string]interface{}{
 		"Id":       123,
-		"UserId":   101,
+		"uid":      1011,
 		"UserName": "yhkl",
 		"age":      100,
 	}
 	Map2Struct(m, x)
 	fmt.Println(x)
+
 }
