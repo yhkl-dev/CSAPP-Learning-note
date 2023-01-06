@@ -1,5 +1,9 @@
 # SSH Paramiko automation scripts
 
+## Python Version
+```
+Python > 3.6+
+```
 
 ## Install requirements
 ```
