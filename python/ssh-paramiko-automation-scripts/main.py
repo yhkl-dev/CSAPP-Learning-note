@@ -1,9 +1,12 @@
 import sys
 from collections import namedtuple
 from typing import Any, Dict, List
-
+import time
 import openpyxl
 import paramiko
+
+from openpyxl import cell
+
 
 IP = namedtuple("IP", ["ip", "port", "username", "password", "cmd"])
 Command = namedtuple("Command", ["command", "description"])
@@ -17,6 +20,16 @@ def init_ssh_client(ip: IP) -> paramiko.SSHClient:
         hostname=ip.ip, port=ip.port, username=ip.username, password=ip.password
     )
     return ssh_client
+
+
+def exec_command_with_invoke_shell(ssh_client: paramiko.SSHClient, command: str) -> str:
+    session = ssh_client.invoke_shell()
+    session.send(f"{str(command).strip()}" + "\n")
+    time.sleep(2)
+    while not session.recv_ready():
+        time.sleep(0.02)
+    data = session.recv(65535).decode()
+    return cell.cell.ILLEGAL_CHARACTERS_RE.sub(r" ", data)
 
 
 def exec_command(ssh_client: paramiko.SSHClient, command: str) -> str:
@@ -68,7 +81,7 @@ def dispatch_commands(ips: List[IP]) -> List[Dict[str, str]]:
             "ip": ip.ip,
         }
         for command in commands:
-            command_result[command.description] = exec_command(
+            command_result[command.description] = exec_command_with_invoke_shell(
                 ssh_client, command.command
             )
         results.append(command_result)
