@@ -29,6 +29,7 @@ def exec_command_with_invoke_shell(ssh_client: paramiko.SSHClient, command: str)
     while not session.recv_ready():
         time.sleep(0.02)
     data = session.recv(65535).decode()
+    session.close()
     return cell.cell.ILLEGAL_CHARACTERS_RE.sub(r" ", data)
 
 
